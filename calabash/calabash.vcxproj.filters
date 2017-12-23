@@ -35,4 +35,9 @@
       <Filter>资源文件\input</Filter>
     </Text>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
 </Project>
