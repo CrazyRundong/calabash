@@ -57,6 +57,11 @@ Diamond::Diamond(std::istream &ism) :
 	_edgeMat = Eigen::MatrixXd::Zero(_edges->num_nodes() + 1, _edges->num_nodes() + 1);
 	_scoreMat = Eigen::MatrixXd::Zero(_edges->num_nodes() + 1, _edges->num_nodes() + 1);
 	set_init_state();
+
+#ifdef _DEBUG_DIAMOND_
+	std::cout << "Init power:  " << _power << std::endl;
+#endif // _DEBUG_DIAMOND_
+
 }
 
 Diamond::Diamond(const Edges &edges, const int numNodes) :
@@ -205,13 +210,17 @@ RandomWalkingSolver::RandomWalkingSolver(const std::string &file) :
 }
 
 double RandomWalkingSolver::solve(const int steps) {
+	// TODO: optmize memory cost
 	double solved_power = 0.;
-	double step_best_power = -1.;
+	double step_best_power = _best_power;
 	int num_nodes = _best_solution->get_num_nodes();
 	std::unique_ptr<Diamond> step_best(new Diamond(*_best_solution));
 
 	// TODO: parallelize this!
 	for (int t = 0; t < steps; ++t) {
+#ifdef _DEBUG_DIAMOND_
+		std::cout << "itor " << t << " / " << steps << ":  ";
+#endif // ! _DEBUG_DIAMOND_
 		_solver_list->clear();
 		for (int i = 1; i < num_nodes + 1; ++i) {
 			_solver_list->push_back(Diamond(*step_best));
@@ -222,6 +231,9 @@ double RandomWalkingSolver::solve(const int steps) {
 			}
 		}
 		solved_power = step_best_power;
+#ifdef _DEBUG_DIAMOND_
+		std::cout << solved_power << std::endl;
+#endif // ! _DEBUG_DIAMOND_
 	}
 
 	_best_power = solved_power;
