@@ -72,11 +72,11 @@ Diamond::Diamond(const Edges &edges, const int numNodes) :
 Diamond::Diamond(const std::vector<int> &states, const Edges &edges, const int numNodes) :
 	_edgeMat(Eigen::MatrixXd::Zero(numNodes + 1, numNodes + 1)),
 	_scoreMat(Eigen::MatrixXd::Zero(numNodes + 1, numNodes + 1)),
-	_state(std::unordered_set<int>(states.begin(), states.end())),
+	_state(std::make_shared<std::unordered_set<int>>(states.begin(), states.end())),
 	_edges(edges),
 	_numNodes(numNodes) {
 	for (auto const &edge : edges) {
-		if (IN_GRAPH(edge, _state)) {
+		if (IN_GRAPH(edge, (*_state))) {
 			_edgeMat(abs(edge.head), abs(edge.tail)) = edge.weight;
 		}
 	}
@@ -84,17 +84,17 @@ Diamond::Diamond(const std::vector<int> &states, const Edges &edges, const int n
 }
 
 void Diamond::set_state(const std::vector<int> &states) {
-	_state.clear();
+	_state->clear();
 	for (auto const &state : states) {
-		_state.insert(state);
+		_state->insert(state);
 		update_edge_mat(state);
 	}
 	_power = calc_power(_edgeMat, _scoreMat, _numNodes);
 }
 
 void Diamond::set_state(const int state) {
-	_state.erase(-state);
-	_state.insert(state);
+	_state->erase(-state);
+	_state->insert(state);
 	update_edge_mat(state);
 	_power = calc_power(_edgeMat, _scoreMat, _numNodes);
 }
@@ -121,7 +121,7 @@ void Diamond::set_init_state() {
 		power_neg = calc_power(tempGraph, tempScore, state_neg, i);
 		states = power_pos > power_neg ? state_pos : state_neg;
 	}
-	_state = states;
+	_state = std::make_shared<std::unordered_set<int>>(states);
 	_edgeMat = tempGraph;
 	_scoreMat = tempScore;
 	_power = std::max(power_pos, power_neg);
@@ -169,13 +169,13 @@ void Diamond::update_edge_mat(const int state) {
 	int idx = std::abs(state);
 	// update edges starts with state
 	for (auto const &tailPair : _edges.query_tail(state)) {
-		if (PAIR_IN_GRAPH(tailPair, _state)) {
+		if (PAIR_IN_GRAPH(tailPair, (*_state))) {
 			_edgeMat(idx, std::abs(tailPair.first)) = tailPair.second;
 		}
 	}
 	// update edges end with state
 	for (auto const &headPair : _edges.query_head(state)) {
-		if (PAIR_IN_GRAPH(headPair, _state)) {
+		if (PAIR_IN_GRAPH(headPair, (*_state))) {
 			_edgeMat(std::abs(headPair.first), idx) = headPair.second;
 		}
 	}

@@ -25,8 +25,8 @@ struct Edge {
 	double weight;
 
 	Edge() {}
-	Edge(const Edge &rhs) :
-		head(rhs.head), tail(rhs.tail), weight(rhs.weight) {}
+	//Edge(const Edge &rhs) :
+	//	head(rhs.head), tail(rhs.tail), weight(rhs.weight) {}
 	Edge(const int h, const int t, const double w) :
 		head(h), tail(t), weight(w) {}
 	~Edge() {}
@@ -35,8 +35,8 @@ struct Edge {
 class Edges {
 public:
 	Edges();
-	Edges(const Edges &rhs): _edges(rhs._edges), _h2t(rhs._h2t), _t2h(rhs._t2h),
-		_numNodes(rhs._numNodes) {}
+	//Edges(const Edges &rhs): _edges(rhs._edges), _h2t(rhs._h2t), _t2h(rhs._t2h),
+	//	_numNodes(rhs._numNodes) {}
 	Edges(std::istream&);
 	~Edges() {}
 
@@ -81,8 +81,7 @@ public:
 private:
 	Eigen::MatrixXd _edgeMat;
 	Eigen::MatrixXd _scoreMat;
-	// TODO: use shared_ptr to share states
-	std::unordered_set<int> _state;
+	std::shared_ptr<std::unordered_set<int>> _state;
 	Edges _edges;
 	int _numNodes;
 	double _power;
