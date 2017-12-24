@@ -4,8 +4,9 @@
 #include <random>
 
 int main(int argc, char** argv) {
+#ifdef _DEBUG_DIAMOND_
 	// test edges
-	std::ifstream ifs3("../input/3.txt");
+	std::ifstream ifs3("../input/2.txt");
 	// Edges eg3(ifs3);
 
 	// test calcbash
@@ -28,6 +29,17 @@ int main(int argc, char** argv) {
 	std::cout << "After copy:" << std::endl
 		<< "Dia3   score:\t" << dia3.get_power() << std::endl
 		<< "Dia3cp score:\t" << dia3cp.get_power() << std::endl;
+#endif
+
+	int numStep = std::stoi(argv[1]);
+	std::string graphFilePath(argv[2]);
+	std::string resultFilePath(argv[3]);
+
+	RandomWalkingSolver solver(graphFilePath);
+	std::ofstream resultFile(resultFilePath, std::ofstream::out);
+
+	std::cout << "Diamond power:\t" << solver.solve(numStep) << std::endl;
+	solver.print_result(resultFile);
 
 	return 0;
 }

@@ -34,6 +34,9 @@
     <Text Include="..\input\3.txt">
       <Filter>资源文件\input</Filter>
     </Text>
+    <Text Include="..\input\2.txt">
+      <Filter>资源文件\input</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">

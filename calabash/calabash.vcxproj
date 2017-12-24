@@ -129,6 +129,7 @@
     <ClInclude Include="calabash.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="..\input\2.txt" />
     <Text Include="..\input\3.txt" />
   </ItemGroup>
   <ItemGroup>
