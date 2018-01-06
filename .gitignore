@@ -263,3 +263,11 @@ __pycache__/
 # input file
 [Ii]nput/
 [Oo]utput/
+
+# Unix IDE configure files
+.idea/
+.vscode/
+
+# CMake build dirs
+[Bb]uild/
+cmake-build*/
